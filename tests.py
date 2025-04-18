@@ -140,3 +140,55 @@ class TestBooksCollector:
         collector.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
 
         assert collector.get_books_for_children() == []
+
+    def test_add_book_in_favorites_add_favorite_book_true(self):
+
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.add_book_in_favorites('Что делать, если ваш кот хочет вас убить')
+
+        assert collector.get_list_of_favorites_books() == ['Что делать, если ваш кот хочет вас убить']
+
+    def test_add_book_in_favorites_not_add_favorite_book_is_empty(self):
+
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+
+        assert collector.get_list_of_favorites_books() == []
+
+    def test_add_book_in_favorites_add_favorite_and_not_favorite_books_just_favorite_book(self):
+
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Ужасы')
+        collector.add_new_book('Властелин колец')
+        collector.set_book_genre('Властелин колец', 'Фантастика')
+        collector.add_book_in_favorites('Что делать, если ваш кот хочет вас убить')
+
+        assert collector.get_list_of_favorites_books() == ['Что делать, если ваш кот хочет вас убить']
+
+    def test_delete_book_from_favorites_delete_correct_book_delete_correct_book(self):
+
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Ужасы')
+        collector.add_new_book('Властелин колец')
+        collector.set_book_genre('Властелин колец', 'Фантастика')
+        collector.add_book_in_favorites('Что делать, если ваш кот хочет вас убить')
+        collector.add_book_in_favorites('Властелин колец')
+        collector.delete_book_from_favorites('Что делать, если ваш кот хочет вас убить')
+
+        assert collector.get_list_of_favorites_books() == ['Властелин колец']
+
+    def test_delete_book_from_favorites_delete_wrong_book_nothing_delete(self):
+
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Ужасы')
+        collector.add_new_book('Властелин колец')
+        collector.set_book_genre('Властелин колец', 'Фантастика')
+        collector.add_book_in_favorites('Что делать, если ваш кот хочет вас убить')
+        collector.add_book_in_favorites('Властелин колец')
+        collector.delete_book_from_favorites('Гордость и предубеждение и зомби')
+
+        assert collector.get_list_of_favorites_books() == ['Что делать, если ваш кот хочет вас убить', 'Властелин колец']
