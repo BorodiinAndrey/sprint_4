@@ -66,7 +66,6 @@ class TestBooksCollector:
     def test_set_book_genre_add_book_with_empty_genre_none_genre(self):
 
         collector = BooksCollector()
-        collector.add_new_book('Гордость и предубеждение и зомби')
         collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Ужасы')
 
         assert collector.get_book_genre('Что делать, если ваш кот хочет вас убить') is None
