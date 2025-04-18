@@ -29,7 +29,7 @@ class TestBooksCollector:
 
         assert len(collector.get_books_genre()) == 0
 
-    def test_add_new_book_add_zero_value(self):
+    def test_add_new_book_is_empty_value(self):
 
         collector = BooksCollector()
         collector.add_new_book('Гордость и предубеждение и зомби')
@@ -63,10 +63,80 @@ class TestBooksCollector:
 
         assert collector.get_book_genre('Что делать, если ваш кот хочет вас убить') == 'Ужасы'
 
-    def test_set_book_genre_add_genre_false(self):
+    def test_set_book_genre_add_book_with_empty_genre_none_genre(self):
 
         collector = BooksCollector()
         collector.add_new_book('Гордость и предубеждение и зомби')
         collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Ужасы')
 
         assert collector.get_book_genre('Что делать, если ваш кот хочет вас убить') is None
+
+    def test_set_book_genre_add_wrong_genre_is_empty(self):
+
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Романтика')
+
+        assert collector.get_book_genre('Что делать, если ваш кот хочет вас убить') == ''
+
+    def test_get_books_with_specific_genre_true(self):
+
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Ужасы')
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.set_book_genre('Гордость и предубеждение и зомби', 'Детектив')
+        collector.add_new_book('Кошмар на улице Вязов')
+        collector.set_book_genre('Кошмар на улице Вязов', 'Ужасы')
+
+        assert collector.get_books_with_specific_genre('Ужасы') == ['Что делать, если ваш кот хочет вас убить', 'Кошмар на улице Вязов']
+
+    def test_get_books_with_specific_genre_with_other_genre_is_empty(self):
+
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Ужасы')
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.set_book_genre('Гордость и предубеждение и зомби', 'Детектив')
+        collector.add_new_book('Кошмар на улице Вязов')
+        collector.set_book_genre('Кошмар на улице Вязов', 'Ужасы')
+
+        assert collector.get_books_with_specific_genre('Мультфильмы') == []
+
+    def test_get_books_with_specific_genre_with_wrong_genre_is_empty(self):
+
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Ужасы')
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.set_book_genre('Гордость и предубеждение и зомби', 'Детектив')
+        collector.add_new_book('Кошмар на улице Вязов')
+        collector.set_book_genre('Кошмар на улице Вязов', 'Ужасы')
+
+        assert collector.get_books_with_specific_genre('Романтика') == []
+
+    def test_get_books_for_children_true(self):
+
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Ужасы')
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.set_book_genre('Гордость и предубеждение и зомби', 'Детектив')
+        collector.add_new_book('Сказка о рыбаке и рыбке')
+        collector.set_book_genre('Сказка о рыбаке и рыбке', 'Мультфильмы')
+        collector.add_new_book('Властелин колец')
+        collector.set_book_genre('Властелин колец', 'Фантастика')
+        collector.add_new_book('Мистер пропер')
+        collector.set_book_genre('Мистер пропер', 'Комедии')
+
+        assert collector.get_books_for_children() == ['Сказка о рыбаке и рыбке', 'Властелин колец', 'Мистер пропер']
+
+    def test_get_books_for_children_with_not_accessible_genre_is_empty(self):
+
+        collector = BooksCollector()
+        collector.add_new_book('Что делать, если ваш кот хочет вас убить')
+        collector.set_book_genre('Что делать, если ваш кот хочет вас убить', 'Ужасы')
+        collector.add_new_book('Гордость и предубеждение и зомби')
+        collector.set_book_genre('Гордость и предубеждение и зомби', 'Ужасы')
+
+        assert collector.get_books_for_children() == []
